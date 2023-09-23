@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto+Slab:wght@200;400;600&display=swap" rel="stylesheet">
+  <script src="https://kit.fontawesome.com/72aa9ed869.js" crossorigin="anonymous"></script>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-4bw+/aepP/YC94hEpVNVgiZdgIC5+VKNBQNGCHeKRQN+PtmoHDEXuppvnDJzQIu9" crossorigin="anonymous">
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-HwwvtgBNo3bZJJLYd8oVXjrBZt8cqVSpeBNS5n7C8IVInixGAoxmnlMuBnhbgrkm" crossorigin="anonymous"></script>
+  <link rel="stylesheet" href="./assets/css/teamStats.css">
+  <title>Cartola Tips</title>
+</head>
+<body>
+  <header>
+    <a href="../index.html"><img src="./assets/imgs/logo.png" alt=""></a>
+  </header>
+  
+  <nav>
+    <ul>
+      <li><a href="teamStats.html">Estatísticas Dos Times</a></li>
+      <li><a href="predictions.html">Previsões</a></li>
+      <li><a href="rankingCartolaTips.html">Ranking CartolaTips</a></li>
+      <li><a href="cartolaTipsPredictions.html">Previsões CartolaTips</a></li>
+      <li><a href="tabelaBrasileirao.html">Tabela Brasileirão 2023</a></li>
+    </ul>
+  </nav>
+
+  <main>
+    <div class="container mt-5">
+      <h1 style="padding: 3%; text-align: center; font-size: 70px;">Estatística Dos Times</h1>
+
+      <select id="teamSelect" class="form-select" onchange="updateTeams()"></select>
+      
+      <div class="tabela-com-scroll">
+        <table class="table table-dark table-bordered table-striped">
+          <thead>
+              <tr>
+                  <th style="text-align: center;" scope="col" colspan="4">Time</th>
+              </tr>
+          </thead>
+
+          <tbody>
+          </tbody>
+        </table>
+  </div>
+</div>
+</main>
+
+<footer>
+  <h1>Billionaires Corporation</h1>
+</footer>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.min.js"></script>
+  <script>
+        let dataGlobal = null;
+
+        async function loadTeams() {
+          try {
+              const response = await fetch('http://localhost:3031/api/teams');
+              const data = await response.json();
+              //console.log(data);
+              dataGlobal = data;              
+              const itemSelect = document.querySelector('select');
+
+              let optionsHTML = '';
+              optionsHTML += "<option>Selecione um time</option>"; 
+
+              for (const team of data) {
+                optionsHTML += `<option value="${team.nome}">${team.nome}</option>`;
+              }
+              itemSelect.innerHTML = optionsHTML;
+
+              data.forEach(team => {
+                  //const listItem = document.createElement('li');
+                  //listItem.textContent = `Nome: ${team.nome}, ID: ${team.id}`;
+                  //teamsList.appendChild(listItem);
+                  //console.log(team.id);
+              });
+          } catch (error) {
+              console.error(error);
+          }
+      }
+      window.addEventListener('load', loadTeams);    
+
+      function updateTeams() {
+        const itemSelectID = document.getElementById('teamSelect');
+              const selectedTeam = itemSelectID.value;
+              const teamData = dataGlobal[selectedTeam];
+              console.log(selectedTeam);
+              console.log(dataGlobal);
+              for(let i=0; i < dataGlobal.length; i++) {
+                if(dataGlobal[i].nome === selectedTeam) {
+                  console.log(dataGlobal[i]);
+                  console.log(dataGlobal[i].nome);
+
+                  const texto = dataGlobal[i].forma;
+                  const matches = texto.match(/[A-Za-z]/g);  
+                  const total = matches ? matches.length : 0;
+                  const vitoriasMatches = (matches || []).filter(match => match === 'W').length;
+                  const derrotasMatches = (matches || []).filter(match => match === 'L').length;
+                  const empatesMatches = (matches || []).filter(match => match === 'D').length;
+
+                  const tableBody = document.querySelector('tbody');
+                  tableBody.innerHTML = `
+                  <tr>
+                    <th style="text-align: center !important;" colspan="4"><img src=${dataGlobal[i].logo} alt=""></th>
+                  </tr>
+                  <tr>
+                    <th colspan="4" scope="col">Jogos</th>
+                  </tr>
+                  <tr class="titulo-tabela">
+                        <th scope="row">Vitórias</th>
+                        <td colspan="4">${vitoriasMatches}</td>
+        
+                    </tr>
+                    <tr>
+                        <th scope="row">Empate</th>
+                        <td colspan="4" >${empatesMatches}</td>
+        
+                    </tr>
+                    <tr>
+                        <th scope="row">Derrotas</th>
+                        <td colspan="4" class="bg-warning">${derrotasMatches}</td>
+        
+                    </tr>
+                    <tr>
+                        <th scope="row">Total</th>
+                        <td colspan="4">${total}</td>
+        
+                    </tr>
+                    <tr>
+                    <th scope="col">#</th>
+                    <th scope="col">Casa</th>
+                    <th scope="col">Fora</th>
+                    <th scope="col">Total</th>
+                  </tr>
+                    
+                    <tr>
+                        <th scope="row">Maior Quantidade De Gols</th>
+                        <td>${dataGlobal[i].big.wins.home}</td>
+                        <td>${dataGlobal[i].big.wins.away}</td>
+                        <td>${dataGlobal[i].big.streak.wins}</td>
+                    </tr>
+                    <tr>
+                        <th scope="row">Maior Quantidade De Gols</th>
+                        <td>${dataGlobal[i].big.loses.home}</td>
+                        <td>${dataGlobal[i].big.loses.away}</td>
+                        <td>${dataGlobal[i].big.streak.loses}</td>
+                    </tr>
+
+                    <th scope="row" colspan="4">Gols</th>
+                    <tr>
+                        <th scope="row">Gols A Favor</th>
+                        <td>${dataGlobal[i].gols.for.total.home}</td>
+                        <td>${dataGlobal[i].gols.for.total.away}</td>
+                        <td>${dataGlobal[i].gols.for.total.total}</td>
+                    </tr>
+                    <tr>
+                        <th scope="row">Gols Contra</th>
+                        <td>${dataGlobal[i].gols.against.total.home}</td>
+                        <td>${dataGlobal[i].gols.against.total.away}</td>
+                        <td>${dataGlobal[i].gols.against.total.total}</td>
+                    </tr>
+                    <tr>
+                        <th scope="row">Média Gols</th>
+                        <td>${dataGlobal[i].gols.for.average.home}</td>
+                        <td>${dataGlobal[i].gols.for.average.away}</td>
+                        <td>${dataGlobal[i].gols.for.average.total}</td>
+                    </tr>
+                    <tr>
+                        <th scope="row">Jogos Sem Sofrer Gols</th>
+                        <td>${dataGlobal[i].clean.home}</td>
+                        <td>${dataGlobal[i].clean.away}</td>
+                        <td>${dataGlobal[i].clean.total}</td>
+                    </tr>
+                    <tr>
+                    <th colspan="4" scope="col">Maiores Sequências</th>
+                    </tr>
+                    <tr>
+                        <th scope="row">Maior Vitória</th>
+                        <td>${dataGlobal[i].big.wins.home}</td>
+                        <td>${dataGlobal[i].big.wins.away}</td>
+                        <td>${dataGlobal[i].big.streak.wins}</td>
+                    </tr>
+                    <tr>
+                        <th scope="row">Maior Derrota</th>
+                        <td>${dataGlobal[i].big.loses.home}</td>
+                        <td>${dataGlobal[i].big.loses.away}</td>
+                        <td>${dataGlobal[i].big.streak.loses}</td>
+                    </tr>
+                    <tr>
+                          <th colspan="4" scope="row">Vitórias</th>
+                      </tr>
+                    <tr>
+                          <th scope="row">Maior Sequência Vitórias</th>
+                          <td colspan="4" s>${dataGlobal[i].big.streak.wins}</td>
+          
+                      </tr>
+                      <tr>
+                          <th scope="row">Maior Sequência Empate</th>
+                          <td colspan="4" s>${dataGlobal[i].big.streak.draws}</td>
+          
+                      </tr>
+                      <tr>
+                          <th scope="row">Maior Sequência Derrota</th>
+                          <td colspan="4" s>${dataGlobal[i].big.streak.loses}</td>
+          
+                      </tr>
+                      <tr>
+                          <th scope="row">Maior Sequência Total</th>
+                          <td colspan="4" s>${dataGlobal[i].big.streak.wins + dataGlobal[i].big.streak.draws + dataGlobal[i].big.streak.loses}</td>
+                      </tr>
+                    `;
+                }
+              }   
+      }
+  </script>
+</body>
+</html>

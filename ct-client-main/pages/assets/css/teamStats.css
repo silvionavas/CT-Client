@@ -1,0 +1,86 @@
+* {
+  margin: 0;
+  padding: 0;
+  outline: 0;
+  box-sizing: border-box;
+}
+body {
+  background-color: rgb(23, 23, 23) !important;
+  font-family: 'Roboto Slab', serif ;
+}
+
+
+h1 {
+  color: rgb(240, 180, 89);
+}
+
+header {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding-top: 2%;
+  padding-bottom: 1%;
+  border-bottom: 2px solid #000; /* Define a cor e a largura da linha */
+  box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.4);
+  width: 100%;
+}
+
+header a {
+  text-decoration: none;
+}
+
+header a img {
+  background-color: rgb(23, 23, 23);
+  width: 150px;
+  height: 100px;
+}
+
+nav {
+  padding-top: 2%;
+  padding-bottom: 3%;
+  border-bottom: 2px solid #000; /* Define a cor e a largura da linha */
+  box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.4);
+  
+}
+
+nav ul {
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+}
+
+nav ul li {
+  list-style: none;
+}
+
+nav ul li a {
+  text-decoration: none;
+  color: #EEF892; 
+  font-size: 22px;
+}
+nav ul li a:hover {
+  text-decoration: none;
+  color: rgb(240, 180, 89);
+}
+
+main {
+  color: white;
+  padding-top: 5%;
+  background-image: url('../imgs/bemvindo.jpg'); /* Substitua 'sua-imagem.jpg' pelo caminho da sua imagem de fundo */
+  background-size: cover; /* Faz a imagem cobrir todo o elemento main */
+  background-repeat: no-repeat; /* Evita a repetição da imagem */
+  background-attachment: fixed; /* Mantém a imagem fixa no lugar enquanto a página rola */
+  height: 100vh;
+}
+
+/* Estilo para o contêiner com rolagem */
+.tabela-com-scroll {
+  max-height: 600px; /* Altura máxima do contêiner */
+  overflow-y: auto; /* Habilita a rolagem vertical */
+}
+
+.titulo-tabela {
+  background-color: rgb(23, 23, 23) !important;
+  color: white;
+}
+
